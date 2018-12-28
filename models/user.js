@@ -1,20 +1,16 @@
 const Mongoose = require('mongoose');
-const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const APP_SECRET = 'authsecretthatrequiresforJWTTokens';
 
 const userSchema = Mongoose.Schema({
-    email: {
+    username: {
         type: String,
         required: true,
         trim: true,
         unique: true,
-        validate: {
-            validator: validator.isEmail,
-            message: '{VALUE} is not a valid Email'
-        }
+        minlength: 3
     },
     password: {
         type: String,
@@ -36,7 +32,7 @@ const userSchema = Mongoose.Schema({
 // When mongoose save the user, we can override what it returns in this specific method
 userSchema.methods.toJSON = function() {
     const user = this;
-    return { _id: user._id, email: user.email }
+    return { _id: user._id, username: user.username }
 }
 
 // the methods array is applied on individual document

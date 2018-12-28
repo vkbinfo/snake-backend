@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 app.post('/user/new', (req, res) => {
     // it just creates a new object with given keys
-    const newUser =new USER(_.pick(req.body, ['email', 'password']));
+    const newUser =new USER(_.pick(req.body, ['username', 'password']));
     newUser.save().then((doc) => {
         newUser.generateAuthToken().then((token) => {
             res.header('x-auth', token).send(newUser);
