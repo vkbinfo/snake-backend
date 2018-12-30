@@ -4,8 +4,11 @@
   "description": "Backend app for snake app to handle user login and highscores",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "10.10.0"
   },
   "author": "zarathustra",
   "license": "ISC",

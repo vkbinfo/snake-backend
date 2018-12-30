@@ -1,5 +1,5 @@
 // setting config for this app
-require('../config');
+require('./config');
 const _ = require('lodash');
 const Mongoose = require('mongoose');
 Mongoose.set('useFindAndModify', false); // setting to close down the deprecation warning for findByIdAndUpdate command.
@@ -7,7 +7,9 @@ const { ObjectId } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { USER } = require('../models/user');
+const { USER } = require('./models/user');
+//importing middleware
+const { authenticate } = require('./middleware/authenticate');
 
 // getting PORT number from environment for Heroku deployment.
 const port = process.env.PORT || 3000
@@ -31,8 +33,32 @@ app.post('/user/new', (req, res) => {
             res.header('x-auth', token).send(newUser);
         })
     }, (err) => {
-        console.error('Validation Error', err);
         res.status(400).send(err.message);
+    })
+})
+
+app.get('/user/me', authenticate, (req, res) => {
+    res.send(req.user);
+})
+
+// route to login a user
+app.post('/user/login', (req, res) => {
+    const userCred = _.pick(req.body, ['email', 'password'])
+    USER.findByCredentials(userCred.email, userCred.password).then((user) => {
+        user.generateAuthToken().then((token) => {
+            res.header('x-auth', token).send(user);
+        })
+    }).catch((error) => {
+        res.status(400).send(error);
+    })
+})
+
+// route to logout the user by deleting the token from db
+app.delete('/user/delete/token', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then((res) => {
+        res.status(200).send();
+    }).catch(() => {
+        res.status(200).send();
     })
 })
 
