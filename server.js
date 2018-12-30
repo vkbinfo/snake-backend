@@ -15,7 +15,7 @@ const { authenticate } = require('./middleware/authenticate');
 const port = process.env.PORT || 3000
 
 const dbURI = process.env.MongoDB_URI;
-
+// nothing just for testing
 Mongoose.connect(dbURI, { useNewUrlParser: true }).then((success) => {
     console.log('Mongodb connected with ' + dbURI);
 }).catch((error) => {
