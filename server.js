@@ -1,12 +1,13 @@
-// setting config for this app
-require('./config');
 const _ = require('lodash');
+let cors = require('cors'); // for CORS compatibility
 const Mongoose = require('mongoose');
 Mongoose.set('useFindAndModify', false); // setting to close down the deprecation warning for findByIdAndUpdate command.
 const { ObjectId } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+// setting config for this app
+require('./config');
 const { USER } = require('./models/user');
 //importing middleware
 const { authenticate } = require('./middleware/authenticate');
@@ -23,6 +24,7 @@ Mongoose.connect(dbURI, { useNewUrlParser: true }).then((success) => {
 });
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/user/new', (req, res) => {
