@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 // setting config for this app
 require('./config');
 const { USER } = require('./models/user');
+const { SCORE } = require('./models/score');
 //importing middleware
 const { authenticate } = require('./middleware/authenticate');
 
@@ -61,6 +62,18 @@ app.delete('/user/delete/token', authenticate, (req, res) => {
         res.status(200).send();
     }).catch(() => {
         res.status(200).send();
+    })
+})
+
+app.post('/user/game/score', authenticate, (req, res) => {
+    const newScore = new SCORE({
+        score: req.body.score,
+        _userId: req.user._id
+    })
+    newScore.save().then((response) => {
+        res.send();
+    }).catch((error) => {
+        res.status(403).send(error);
     })
 })
 
