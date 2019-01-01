@@ -41,6 +41,7 @@ userSchema.methods.generateAuthToken = function () { // we are not using arrow f
     const access = 'auth';
     const token = jwt.sign({
         _id: user._id,
+        username: user.username,
         access
     }, APP_SECRET)
     user.tokens.push({
