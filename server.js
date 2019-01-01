@@ -32,7 +32,7 @@ app.post('/user/new', (req, res) => {
     const newUser =new USER(_.pick(req.body, ['username', 'password']));
     newUser.save().then((doc) => {
         newUser.generateAuthToken().then((token) => {
-            res.header('x-auth', token).send(newUser);
+            res.header('x-auth', token).send({...newUser, 'x-auth': token});
         })
     }, (err) => {
         res.status(400).send(err.message);
@@ -48,7 +48,7 @@ app.post('/user/login', (req, res) => {
     const userCred = _.pick(req.body, ['email', 'password'])
     USER.findByCredentials(userCred.email, userCred.password).then((user) => {
         user.generateAuthToken().then((token) => {
-            res.header('x-auth', token).send(user);
+            res.header('x-auth', token).send({...user, 'x-auth': token});
         })
     }).catch((error) => {
         res.status(400).send(error);
