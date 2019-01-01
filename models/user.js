@@ -81,10 +81,10 @@ userSchema.statics.findByToken = function (token) {
     })
 }
 
-userSchema.statics.findByCredentials = function (email, password) {
+userSchema.statics.findByCredentials = function (username, password) {
     const USER = this;
     return USER.findOne({
-        email: email
+        username: username
     }).then((user) => {
         if (!user) {
             return Promise.reject('User does not Exist');

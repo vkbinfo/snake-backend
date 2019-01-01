@@ -45,8 +45,8 @@ app.get('/user/me', authenticate, (req, res) => {
 
 // route to login a user
 app.post('/user/login', (req, res) => {
-    const userCred = _.pick(req.body, ['email', 'password'])
-    USER.findByCredentials(userCred.email, userCred.password).then((user) => {
+    const userCred = _.pick(req.body, ['username', 'password'])
+    USER.findByCredentials(userCred.username, userCred.password).then((user) => {
         user.generateAuthToken().then((token) => {
             res.header('x-auth', token).send({...user, 'x-auth': token});
         })
