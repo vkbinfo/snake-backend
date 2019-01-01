@@ -9,7 +9,7 @@ const authenticate = (req, res, next) => {
         req.token = token;
         next(); // we need to call next, when we want to pass the request from middleware to original route, otherwise it will not go to anywhere
     }).catch((error)=> {
-        res.status(401).send()
+        res.status(401).send(error);
     })
 }
 
