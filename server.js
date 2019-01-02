@@ -68,13 +68,35 @@ app.delete('/user/delete/token', authenticate, (req, res) => {
 app.post('/user/game/score', authenticate, (req, res) => {
     const newScore = new SCORE({
         score: req.body.score,
-        _userId: req.user._id
+        _username: req.user.username
     })
     newScore.save().then((response) => {
         res.send();
     }).catch((error) => {
         res.status(403).send(error);
     })
+})
+
+// api to top 10 scores of all users.
+app.get('/game/scores', (req, res) => {
+    SCORE.find({}).sort({score: 'desc'}).limit(10).exec(function(err, docs) { 
+        if (err) {
+            res.status(404).send(err);
+            return;
+        }
+        res.send({scores: docs})
+     });
+})
+
+// api to top 10 scores of specific user.
+app.get('/user/game/scores', authenticate, (req, res) => {
+    SCORE.find({_username: req.user.username}).sort({score: 'desc'}).limit(10).exec(function(err, docs) { 
+        if (err) {
+            res.status(404).send(err);
+            return;
+        }
+        res.send({scores: docs})
+     });
 })
 
 app.listen(port, () => {

@@ -5,8 +5,8 @@ const scoreSchema = Mongoose.Schema({
         type: Number,
         required: true,
     },
-    _userId: {
-        type: Mongoose.Schema.Types.ObjectId,
+    _username: {
+        type: String,
         required: true
     }
 })
